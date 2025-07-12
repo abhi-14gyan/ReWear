@@ -39,5 +39,5 @@ ReWear is a web-based platform that enables users to exchange unused clothing th
 ### Team:
 - Arnav Kumar arnav170905@gmail.com
 - Abhigyan Srivastava abhi.14gyan@gmail.com
-- Yash Agarwal yash9798@gmail.com
+- Yash Agarwal yashagarwal9798@gmail.com
 - Raunak Kumar Tripathi raunaktripathi1202@gmail.com
