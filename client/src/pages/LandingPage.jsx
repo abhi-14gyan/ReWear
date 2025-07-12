@@ -5,14 +5,14 @@ import { useTheme } from '../contexts/ThemeContext';
 import { ArrowRight, Heart, Users, TrendingUp, Star, Search, Sun, Moon } from 'lucide-react';
 import axios from 'axios';
 
-// Hardcoded categories for now
+// Categories matching BrowseItems types
 const categories = [
-  { name: 'Men', icon: <Users className="w-6 h-6" /> },
-  { name: 'Women', icon: <Heart className="w-6 h-6" /> },
-  { name: 'Kids', icon: <Star className="w-6 h-6" /> },
-  { name: 'Accessories', icon: <TrendingUp className="w-6 h-6" /> },
-  { name: 'Footwear', icon: <TrendingUp className="w-6 h-6" /> },
-  { name: 'Other', icon: <Star className="w-6 h-6" /> },
+  { name: 'Casual', icon: <Users className="w-6 h-6" /> },
+  { name: 'Formal', icon: <Heart className="w-6 h-6" /> },
+  { name: 'Sportswear', icon: <Star className="w-6 h-6" /> },
+  { name: 'Vintage', icon: <TrendingUp className="w-6 h-6" /> },
+  { name: 'Designer', icon: <TrendingUp className="w-6 h-6" /> },
+  { name: 'School Dresses', icon: <TrendingUp className="w-6 h-6" /> },
 ];
 
 const LandingPage = () => {
@@ -114,7 +114,7 @@ const LandingPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
             {categories.map((cat, idx) => (
               <Link
-                to={`/browse?category=${encodeURIComponent(cat.name)}`}
+                to={`/browse?type=${encodeURIComponent(cat.name)}`}
                 key={cat.name}
                 className="bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900 transition-colors rounded-lg flex flex-col items-center justify-center p-4 md:p-6 shadow-sm border border-gray-200 dark:border-gray-700 group"
               >
