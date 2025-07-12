@@ -13,12 +13,12 @@ const itemSchema = new Schema({
   category: {
     type: String,
     required: true,
-    enum: ['tops', 'bottoms', 'dresses', 'outerwear', 'shoes', 'accessories']
+    enum: ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Accessories']
   },
   type: {
     type: String,
     required: true,
-    enum: ['men', 'women', 'unisex']
+    enum: ['Casual', 'Formal', 'Sportswear', 'Vintage', 'Designer', "School Dresses"]
   },
   size: {
     type: String,
