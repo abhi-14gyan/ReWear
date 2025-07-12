@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const User = require('./models/User');
+import { connect } from 'mongoose';
+import User, { findOne } from './models/User';
 
 // MongoDB connection
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI , {
+    const conn = await connect(process.env.MONGODB_URI , {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -22,7 +22,7 @@ const connectDB = async () => {
 
 const createDefaultAdmin = async () => {
   try {
-    const adminExists = await User.findOne({ email: 'admin@rewear.com' });
+    const adminExists = await findOne({ email: 'admin@rewear.com' });
     
     if (!adminExists) {
       const adminUser = new User({
@@ -41,4 +41,4 @@ const createDefaultAdmin = async () => {
   }
 };
 
-module.exports = { connectDB }; 
+export default { connectDB }; 
