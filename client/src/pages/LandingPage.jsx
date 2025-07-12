@@ -87,7 +87,7 @@ const LandingPage = () => {
         Welcome to ReWear
         </h1>
           <div className="prose prose-lg mx-auto text-gray-600 dark:text-gray-300 leading-relaxed">
-            <p className="mb-6">
+            <p className="mb-6" style={{fontSize: '1.2rem'}}>
               ReWear is more than just a clothing exchange platform—it's a movement towards sustainable fashion and conscious consumption. 
               We believe that every piece of clothing deserves a second chance, and every fashion enthusiast deserves access to unique, 
               quality garments without contributing to the environmental impact of fast fashion.
