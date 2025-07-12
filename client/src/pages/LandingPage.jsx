@@ -151,7 +151,7 @@ const LandingPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {featuredItems.map((item) => (
+              {featuredItems.slice(0, 3).map((item) => (
                 <div key={item.id} className="card overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
                   <div className="aspect-w-16 aspect-h-12 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     {item.images && item.images.length > 0 ? (
