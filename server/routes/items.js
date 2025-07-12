@@ -23,7 +23,11 @@ const upload = multer({
 router.get('/', async (req, res) => {
   try {
     const { category, type, status, search } = req.query;
-    let query = { status: 'approved', isAvailable: true };
+    let query = {}; 
+    if (!req.query.debug) {
+      query.status = 'approved';
+      query.isAvailable = true;
+    }
 
     if (category) query.category = category;
     if (type) query.type = type;
@@ -39,13 +43,25 @@ router.get('/', async (req, res) => {
       .populate('userId', 'name')
       .sort({ createdAt: -1 });
 
+    console.log(`Found ${items.length} items matching query:`, query);
+    
+    // Debug: Log first few items to see their structure
+    if (items.length > 0) {
+      console.log('Sample item:', {
+        id: items[0]._id,
+        title: items[0].title,
+        images: items[0].images,
+        userId: items[0].userId
+      });
+    }
+
     const transformedItems = items.map(item => {
       const itemObj = item.toObject();
       return {
         ...itemObj,
         id: itemObj._id,
-        uploaderName: itemObj.userId.name,
-        uploaderId: itemObj.userId._id
+        uploaderName: itemObj.userId?.name || 'Unknown',
+        uploaderId: itemObj.userId?._id || null
       };
     });
 
@@ -116,7 +132,7 @@ router.post('/', auth, upload.array('images', 5), [
     }
 
     const { title, description, category, type, size, condition, tags, points } = req.body;
-    const images = req.files ? req.files.map(file => file.path) : [];
+    const images = req.files ? req.files.map(file => file.path || file.filename) : [];
 
     const item = new Item({
       title,
@@ -133,6 +149,13 @@ router.post('/', auth, upload.array('images', 5), [
     });
 
     await item.save();
+    
+    console.log('Created item:', {
+      id: item._id,
+      title: item.title,
+      images: item.images,
+      status: item.status
+    });
 
     res.json({ id: item._id, message: 'Item created successfully' });
   } catch (err) {
@@ -166,7 +189,7 @@ router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
     };
 
     if (req.files && req.files.length > 0) {
-      updateData.images = req.files.map(file => file.path);
+      updateData.images = req.files.map(file => file.path || file.filename);
     }
 
     await Item.findByIdAndUpdate(itemId, updateData);
@@ -221,6 +244,33 @@ router.get('/user/:userId', async (req, res) => {
     console.error('Get user items error:', err);
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+// Debug route to check all items
+router.get('/debug/all', async (req, res) => {
+  try {
+    const allItems = await Item.find({}).populate('userId', 'name');
+    console.log('All items in database:', allItems.map(item => ({
+      id: item._id,
+      title: item.title,
+      images: item.images,
+      status: item.status,
+      isAvailable: item.isAvailable
+    })));
+    res.json(allItems);
+  } catch (err) {
+    console.error('Debug route error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Test image route
+router.get('/debug/test-image', (req, res) => {
+  res.json({
+    message: 'Image test',
+    testUrl: '/uploads/item-1752316699525-447588118.png',
+    fullUrl: `http://localhost:5000/uploads/item-1752316699525-447588118.png`
+  });
 });
 
 export default router; 

@@ -20,15 +20,27 @@ export const getImageUrl = (imagePath) => {
 export const getImageUrlFull = (imagePath) => {
   if (!imagePath) return '';
   
+  // Debug logging
+  console.log('getImageUrlFull called with:', imagePath);
+  
   // If the image path is already a full URL (Cloudinary), return it as is
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    console.log('Returning Cloudinary URL:', imagePath);
     return imagePath;
   }
   
-  // Fallback for local images (if any)
+  // For development, use the proxy (same as getImageUrl)
+  if (process.env.NODE_ENV === 'development') {
+    const url = `/uploads/${imagePath}`;
+    console.log('Returning development URL:', url);
+    return url;
+  }
+  
+  // For production, construct full URL
   const protocol = window.location.protocol;
   const hostname = window.location.hostname;
-  const port = process.env.NODE_ENV === 'development' ? ':5000' : '';
-  
-  return `${protocol}//${hostname}${port}/uploads/${imagePath}`;
+  const port = '';
+  const url = `${protocol}//${hostname}${port}/uploads/${imagePath}`;
+  console.log('Returning production URL:', url);
+  return url;
 }; 

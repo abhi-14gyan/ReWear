@@ -74,12 +74,24 @@ router.get('/my-requests', auth, async (req, res) => {
 
     const transformedSwaps = swaps.map(swap => {
       const swapObj = swap.toObject();
+      
+      // Handle case where itemId is null (item was deleted)
+      if (!swapObj.itemId) {
+        return {
+          ...swapObj,
+          id: swapObj._id,
+          itemTitle: 'Item no longer available',
+          itemImages: [],
+          itemOwnerName: 'Unknown'
+        };
+      }
+      
       return {
         ...swapObj,
         id: swapObj._id,
         itemTitle: swapObj.itemId.title,
         itemImages: swapObj.itemId.images,
-        itemOwnerName: swapObj.itemId.userId.name
+        itemOwnerName: swapObj.itemId.userId?.name || 'Unknown'
       };
     });
 
@@ -109,12 +121,24 @@ router.get('/my-items', auth, async (req, res) => {
 
     const transformedSwaps = swaps.map(swap => {
       const swapObj = swap.toObject();
+      
+      // Handle case where itemId is null (item was deleted)
+      if (!swapObj.itemId) {
+        return {
+          ...swapObj,
+          id: swapObj._id,
+          itemTitle: 'Item no longer available',
+          itemImages: [],
+          requesterName: swapObj.requesterId?.name || 'Unknown'
+        };
+      }
+      
       return {
         ...swapObj,
         id: swapObj._id,
         itemTitle: swapObj.itemId.title,
         itemImages: swapObj.itemId.images,
-        requesterName: swapObj.requesterId.name
+        requesterName: swapObj.requesterId?.name || 'Unknown'
       };
     });
 
@@ -226,13 +250,26 @@ router.get('/history', auth, async (req, res) => {
 
     const transformedSwaps = swaps.map(swap => {
       const swapObj = swap.toObject();
+      
+      // Handle case where itemId is null (item was deleted)
+      if (!swapObj.itemId) {
+        return {
+          ...swapObj,
+          id: swapObj._id,
+          itemTitle: 'Item no longer available',
+          itemImages: [],
+          requesterName: swapObj.requesterId?.name || 'Unknown',
+          ownerName: 'Unknown'
+        };
+      }
+      
       return {
         ...swapObj,
         id: swapObj._id,
         itemTitle: swapObj.itemId.title,
         itemImages: swapObj.itemId.images,
-        requesterName: swapObj.requesterId.name,
-        ownerName: swapObj.itemId.userId.name
+        requesterName: swapObj.requesterId?.name || 'Unknown',
+        ownerName: swapObj.itemId.userId?.name || 'Unknown'
       };
     });
 
