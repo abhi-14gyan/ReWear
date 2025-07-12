@@ -1,7 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import dotenv from 'dotenv';
+import { connectDB } from './database.js';
+import authRoutes from './routes/auth.js';
+import itemsRoutes from './routes/items.js';
+import swapsRoutes from './routes/swaps.js';
+import adminRoutes from './routes/admin.js';
+import usersRoutes from './routes/users.js';
 
 dotenv.config();
 
@@ -12,13 +18,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const { connectDB } = require('./database');
-
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/items', require('./routes/items'));
-app.use('/api/swaps', require('./routes/swaps'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/users', require('./routes/users'));
+app.use('/api/auth', authRoutes);
+app.use('/api/items', itemsRoutes);
+app.use('/api/swaps', swapsRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/users', usersRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
