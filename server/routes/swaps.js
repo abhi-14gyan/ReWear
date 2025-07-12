@@ -72,12 +72,16 @@ router.get('/my-requests', auth, async (req, res) => {
       })
       .sort({ createdAt: -1 });
 
-    const transformedSwaps = swaps.map(swap => ({
-      ...swap.toObject(),
-      itemTitle: swap.itemId.title,
-      itemImages: swap.itemId.images,
-      itemOwnerName: swap.itemId.userId.name
-    }));
+    const transformedSwaps = swaps.map(swap => {
+      const swapObj = swap.toObject();
+      return {
+        ...swapObj,
+        id: swapObj._id,
+        itemTitle: swapObj.itemId.title,
+        itemImages: swapObj.itemId.images,
+        itemOwnerName: swapObj.itemId.userId.name
+      };
+    });
 
     res.json(transformedSwaps);
   } catch (err) {
@@ -103,12 +107,16 @@ router.get('/my-items', auth, async (req, res) => {
     })
     .sort({ createdAt: -1 });
 
-    const transformedSwaps = swaps.map(swap => ({
-      ...swap.toObject(),
-      itemTitle: swap.itemId.title,
-      itemImages: swap.itemId.images,
-      requesterName: swap.requesterId.name
-    }));
+    const transformedSwaps = swaps.map(swap => {
+      const swapObj = swap.toObject();
+      return {
+        ...swapObj,
+        id: swapObj._id,
+        itemTitle: swapObj.itemId.title,
+        itemImages: swapObj.itemId.images,
+        requesterName: swapObj.requesterId.name
+      };
+    });
 
     res.json(transformedSwaps);
   } catch (err) {
@@ -216,13 +224,17 @@ router.get('/history', auth, async (req, res) => {
     })
     .sort({ completedAt: -1 });
 
-    const transformedSwaps = swaps.map(swap => ({
-      ...swap.toObject(),
-      itemTitle: swap.itemId.title,
-      itemImages: swap.itemId.images,
-      requesterName: swap.requesterId.name,
-      ownerName: swap.itemId.userId.name
-    }));
+    const transformedSwaps = swaps.map(swap => {
+      const swapObj = swap.toObject();
+      return {
+        ...swapObj,
+        id: swapObj._id,
+        itemTitle: swapObj.itemId.title,
+        itemImages: swapObj.itemId.images,
+        requesterName: swapObj.requesterId.name,
+        ownerName: swapObj.itemId.userId.name
+      };
+    });
 
     res.json(transformedSwaps);
   } catch (err) {

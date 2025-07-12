@@ -108,7 +108,14 @@ router.get('/profile', auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json(user);
+    
+    const userObj = user.toObject();
+    const transformedUser = {
+      ...userObj,
+      id: userObj._id
+    };
+    
+    res.json(transformedUser);
   } catch (err) {
     console.error('Profile error:', err);
     res.status(500).json({ message: 'Server error' });

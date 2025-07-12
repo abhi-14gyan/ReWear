@@ -49,11 +49,15 @@ router.get('/', async (req, res) => {
       .populate('userId', 'name')
       .sort({ createdAt: -1 });
 
-    const transformedItems = items.map(item => ({
-      ...item.toObject(),
-      uploaderName: item.userId.name,
-      userId: item.userId._id
-    }));
+    const transformedItems = items.map(item => {
+      const itemObj = item.toObject();
+      return {
+        ...itemObj,
+        id: itemObj._id,
+        uploaderName: itemObj.userId.name,
+        uploaderId: itemObj.userId._id
+      };
+    });
 
     res.json(transformedItems);
   } catch (err) {
@@ -69,11 +73,15 @@ router.get('/featured', async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(6);
 
-    const transformedItems = items.map(item => ({
-      ...item.toObject(),
-      uploaderName: item.userId.name,
-      userId: item.userId._id
-    }));
+    const transformedItems = items.map(item => {
+      const itemObj = item.toObject();
+      return {
+        ...itemObj,
+        id: itemObj._id,
+        uploaderName: itemObj.userId.name,
+        uploaderId: itemObj.userId._id
+      };
+    });
 
     res.json(transformedItems);
   } catch (err) {
@@ -89,10 +97,12 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Item not found' });
     }
 
+    const itemObj = item.toObject();
     const transformedItem = {
-      ...item.toObject(),
-      uploaderName: item.userId.name,
-      uploaderId: item.userId._id
+      ...itemObj,
+      id: itemObj._id,
+      uploaderName: itemObj.userId.name,
+      uploaderId: itemObj.userId._id
     };
 
     res.json(transformedItem);
@@ -204,11 +214,15 @@ router.get('/user/:userId', async (req, res) => {
     .populate('userId', 'name')
     .sort({ createdAt: -1 });
 
-    const transformedItems = items.map(item => ({
-      ...item.toObject(),
-      uploaderName: item.userId.name,
-      userId: item.userId._id
-    }));
+    const transformedItems = items.map(item => {
+      const itemObj = item.toObject();
+      return {
+        ...itemObj,
+        id: itemObj._id,
+        uploaderName: itemObj.userId.name,
+        uploaderId: itemObj.userId._id
+      };
+    });
 
     res.json(transformedItems);
   } catch (err) {

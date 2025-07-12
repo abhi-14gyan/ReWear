@@ -15,10 +15,14 @@ router.get('/:id/items', async (req, res) => {
     .populate('userId', 'name')
     .sort({ createdAt: -1 });
 
-    const transformedItems = items.map(item => ({
-      ...item.toObject(),
-      uploaderName: item.userId.name
-    }));
+    const transformedItems = items.map(item => {
+      const itemObj = item.toObject();
+      return {
+        ...itemObj,
+        id: itemObj._id,
+        uploaderName: itemObj.userId.name
+      };
+    });
 
     res.json(transformedItems);
   } catch (err) {

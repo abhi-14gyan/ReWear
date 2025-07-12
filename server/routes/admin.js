@@ -12,11 +12,15 @@ router.get('/pending-items', adminAuth, async (req, res) => {
       .populate('userId', 'name email')
       .sort({ createdAt: -1 });
 
-    const transformedItems = items.map(item => ({
-      ...item.toObject(),
-      uploaderName: item.userId.name,
-      uploaderEmail: item.userId.email
-    }));
+    const transformedItems = items.map(item => {
+      const itemObj = item.toObject();
+      return {
+        ...itemObj,
+        id: itemObj._id,
+        uploaderName: itemObj.userId.name,
+        uploaderEmail: itemObj.userId.email
+      };
+    });
 
     res.json(transformedItems);
   } catch (err) {
@@ -85,7 +89,11 @@ router.get('/users', adminAuth, async (req, res) => {
       }
     ]);
 
-    res.json(users);
+    const transformedUsers = users.map(user => ({
+      ...user,
+      id: user._id
+    }));
+    res.json(transformedUsers);
   } catch (err) {
     console.error('Get users error:', err);
     res.status(500).json({ message: 'Server error' });

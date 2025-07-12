@@ -22,7 +22,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const [itemsRes, requestsRes, historyRes] = await Promise.all([
-        axios.get(`/api/users/${user._id}/items`),
+        axios.get(`/api/users/${user.id}/items`),
         axios.get('/api/swaps/my-items'),
         axios.get('/api/swaps/history')
       ]);

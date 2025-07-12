@@ -42,11 +42,11 @@ const BrowseItems = () => {
   };
 
   return (
-    <div className="bg-gray-300  mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="bg-gray-50 dark:bg-gray-900 mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-colors duration-200">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Browse Items</h1>
-        <p className="text-gray-600">Discover amazing pieces from our community</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Browse Items</h1>
+        <p className="text-gray-600 dark:text-gray-400">Discover amazing pieces from our community</p>
       </div>
 
       {/* Filters and Search */}
@@ -100,8 +100,8 @@ const BrowseItems = () => {
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-lg ${
                 viewMode === 'grid' 
-                  ? 'bg-primary-100 text-primary-600' 
-                  : 'text-gray-400 hover:text-gray-600'
+                  ? 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400' 
+                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
               }`}
             >
               <Grid size={20} />
@@ -110,8 +110,8 @@ const BrowseItems = () => {
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-lg ${
                 viewMode === 'list' 
-                  ? 'bg-primary-100 text-primary-600' 
-                  : 'text-gray-400 hover:text-gray-600'
+                  ? 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400' 
+                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
               }`}
             >
               <List size={20} />
@@ -132,11 +132,11 @@ const BrowseItems = () => {
 
       {/* Results Count */}
       <div className="flex items-center justify-between mb-6">
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-400">
           {loading ? 'Loading...' : `${items.length} items found`}
         </p>
         {(searchTerm || category || type) && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Filtered by: {[searchTerm, category, type].filter(Boolean).join(', ')}
           </p>
         )}
@@ -149,11 +149,11 @@ const BrowseItems = () => {
         </div>
       ) : items.length === 0 ? (
         <div className="text-center py-12">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Search className="w-12 h-12 text-gray-400" />
+          <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Search className="w-12 h-12 text-gray-400 dark:text-gray-500" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No items found</h3>
-          <p className="text-gray-500 mb-4">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No items found</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">
             Try adjusting your search criteria or browse all items
           </p>
           <button
@@ -185,25 +185,25 @@ const BrowseItems = () => {
                     className={`object-cover ${viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'}`}
                   />
                 ) : (
-                  <div className={`bg-gray-200 flex items-center justify-center ${
+                  <div className={`bg-gray-200 dark:bg-gray-700 flex items-center justify-center ${
                     viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'
                   }`}>
-                    <span className="text-gray-400">No image</span>
+                    <span className="text-gray-400 dark:text-gray-500">No image</span>
                   </div>
                 )}
               </div>
               
               <div className={`p-4 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{item.title}</h3>
-                <p className="text-sm text-gray-600 mb-2">{item.uploaderName}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{item.uploaderName}</p>
                 <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
                     {item.category} • {item.condition}
                   </div>
-                  <span className="text-primary-600 font-medium">{item.points} pts</span>
+                  <span className="text-primary-600 dark:text-primary-400 font-medium">{item.points} pts</span>
                 </div>
                 {viewMode === 'list' && item.description && (
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
                     {item.description}
                   </p>
                 )}

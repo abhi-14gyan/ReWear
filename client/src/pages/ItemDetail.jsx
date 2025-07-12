@@ -82,10 +82,10 @@ const ItemDetail = () => {
 
   if (error || !item) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Item Not Found</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Item Not Found</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
           <button
             onClick={() => navigate('/browse')}
             className="btn-primary"
@@ -101,7 +101,7 @@ const ItemDetail = () => {
   const isOwnItem = user && item.uploaderId === user.id;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <div className="grid lg:grid-cols-2 gap-12">
         {/* Image Gallery */}
         <div className="space-y-4">
@@ -113,8 +113,8 @@ const ItemDetail = () => {
                 className="w-full h-96 object-cover rounded-lg"
               />
             ) : (
-              <div className="w-full h-96 bg-gray-200 rounded-lg flex items-center justify-center">
-                <span className="text-gray-400">No image available</span>
+              <div className="w-full h-96 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                <span className="text-gray-400 dark:text-gray-500">No image available</span>
               </div>
             )}
             
@@ -122,13 +122,13 @@ const ItemDetail = () => {
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2 hover:bg-opacity-100"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 rounded-full p-2 hover:bg-opacity-100 dark:hover:bg-opacity-100"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2 hover:bg-opacity-100"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 rounded-full p-2 hover:bg-opacity-100 dark:hover:bg-opacity-100"
                 >
                   <ChevronRight size={20} />
                 </button>
@@ -160,8 +160,8 @@ const ItemDetail = () => {
         {/* Item Information */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{item.title}</h1>
-            <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{item.title}</h1>
+            <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
               <div className="flex items-center space-x-1">
                 <User size={16} />
                 <span>{item.uploaderName}</span>
@@ -172,11 +172,11 @@ const ItemDetail = () => {
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-primary-600">{item.points} points</span>
+              <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">{item.points} points</span>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                 item.isAvailable 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-red-100 text-red-800'
+                  ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' 
+                  : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
               }`}>
                 {item.isAvailable ? 'Available' : 'Not Available'}
               </span>
@@ -185,44 +185,44 @@ const ItemDetail = () => {
 
           <div className="space-y-4">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-              <p className="text-gray-600">{item.description}</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
+              <p className="text-gray-600 dark:text-gray-400">{item.description}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-sm font-medium text-gray-500">Category</span>
-                <p className="text-gray-900">{item.category}</p>
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Category</span>
+                <p className="text-gray-900 dark:text-white">{item.category}</p>
               </div>
               <div>
-                <span className="text-sm font-medium text-gray-500">Type</span>
-                <p className="text-gray-900">{item.type}</p>
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Type</span>
+                <p className="text-gray-900 dark:text-white">{item.type}</p>
               </div>
               {item.size && (
                 <div>
-                  <span className="text-sm font-medium text-gray-500">Size</span>
-                  <p className="text-gray-900">{item.size}</p>
+                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Size</span>
+                  <p className="text-gray-900 dark:text-white">{item.size}</p>
                 </div>
               )}
               <div>
-                <span className="text-sm font-medium text-gray-500">Condition</span>
-                <p className="text-gray-900">{item.condition}</p>
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Condition</span>
+                <p className="text-gray-900 dark:text-white">{item.condition}</p>
               </div>
             </div>
 
-            {item.tags && (
+            {item.tags && item.tags.length > 0 && (
               <div>
-                <span className="text-sm font-medium text-gray-500 flex items-center space-x-1 mb-2">
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center space-x-1 mb-2">
                   <Tag size={16} />
                   <span>Tags</span>
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  {item.tags.split(',').map((tag, index) => (
+                  {item.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                      className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
                     >
-                      {tag.trim()}
+                      {tag}
                     </span>
                   ))}
                 </div>
@@ -233,10 +233,10 @@ const ItemDetail = () => {
           {/* Swap Options */}
           {!isOwnItem && item.isAvailable && (
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Request This Item</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Request This Item</h3>
               
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-4">
                   {error}
                 </div>
               )}
@@ -251,7 +251,7 @@ const ItemDetail = () => {
                       onChange={(e) => setSwapType(e.target.value)}
                       className="text-primary-600"
                     />
-                    <span>Direct Swap</span>
+                    <span className="text-gray-900 dark:text-white">Direct Swap</span>
                   </label>
                   <label className="flex items-center space-x-2">
                     <input
@@ -261,17 +261,17 @@ const ItemDetail = () => {
                       onChange={(e) => setSwapType(e.target.value)}
                       className="text-primary-600"
                     />
-                    <span>Redeem with Points</span>
+                    <span className="text-gray-900 dark:text-white">Redeem with Points</span>
                   </label>
                 </div>
 
                 {swapType === 'points' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Points to Offer
                     </label>
                     <div className="relative">
-                      <Coins className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Coins className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                       <input
                         type="number"
                         value={pointsOffered}
@@ -282,7 +282,7 @@ const ItemDetail = () => {
                         max={user?.points || 0}
                       />
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                       Your balance: {user?.points || 0} points
                     </p>
                   </div>
@@ -307,9 +307,9 @@ const ItemDetail = () => {
           )}
 
           {isOwnItem && (
-            <div className="card p-6 bg-blue-50 border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-900 mb-2">Your Item</h3>
-              <p className="text-blue-700">
+            <div className="card p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+              <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">Your Item</h3>
+              <p className="text-blue-700 dark:text-blue-400">
                 This is your item. You can view swap requests in your dashboard.
               </p>
             </div>
