@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { User, Package, Clock, CheckCircle, XCircle, Plus, Edit } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+import { User, Package, Clock, CheckCircle, XCircle, Plus, Edit, Sun, Moon } from 'lucide-react';
 import axios from 'axios';
 
 const Dashboard = () => {
   const { user, updateProfile } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [userItems, setUserItems] = useState([]);
   const [swapRequests, setSwapRequests] = useState([]);
   const [swapHistory, setSwapHistory] = useState([]);
@@ -20,7 +22,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const [itemsRes, requestsRes, historyRes] = await Promise.all([
-        axios.get(`/api/users/${user.id}/items`),
+        axios.get(`/api/users/${user._id}/items`),
         axios.get('/api/swaps/my-items'),
         axios.get('/api/swaps/history')
       ]);
@@ -74,6 +76,17 @@ const Dashboard = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Header with Theme Toggle */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        >
+          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+      </div>
+
       {/* Profile Section */}
       <div className="card p-6 mb-8">
         <div className="flex items-center justify-between">
@@ -108,21 +121,21 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <h1 className="text-2xl font-bold text-gray-900">{user?.name}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{user?.name}</h1>
                   <button
                     onClick={() => setEditingName(true)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
                   >
                     <Edit size={16} />
                   </button>
                 </div>
               )}
-              <p className="text-gray-600">{user?.email}</p>
+              <p className="text-gray-600 dark:text-gray-400">{user?.email}</p>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-primary-600">{user?.points}</div>
-            <div className="text-sm text-gray-500">Points Balance</div>
+            <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{user?.points}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Points Balance</div>
           </div>
         </div>
       </div>
@@ -131,7 +144,7 @@ const Dashboard = () => {
         {/* My Items Section */}
         <div className="card p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 flex items-center space-x-2">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
               <Package className="w-5 h-5" />
               <span>My Items</span>
             </h2>
@@ -143,8 +156,8 @@ const Dashboard = () => {
           
           {userItems.length === 0 ? (
             <div className="text-center py-8">
-              <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500 mb-4">You haven't listed any items yet</p>
+              <Package className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 mb-4">You haven't listed any items yet</p>
               <Link to="/add-item" className="btn-primary">
                 List Your First Item
               </Link>
@@ -152,18 +165,18 @@ const Dashboard = () => {
           ) : (
             <div className="space-y-4">
               {userItems.slice(0, 5).map((item) => (
-                <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                  {item.images && (
+                <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  {item.images && item.images.length > 0 && (
                     <img 
-                      src={`/uploads/${item.images.split(',')[0]}`}
+                      src={`/uploads/${item.images[0]}`}
                       alt={item.title}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                   )}
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{item.title}</h3>
-                    <p className="text-sm text-gray-500">{item.category} • {item.condition}</p>
-                    <p className="text-sm text-primary-600">{item.points} points</p>
+                    <h3 className="font-medium text-gray-900 dark:text-white">{item.title}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{item.category} • {item.condition}</p>
+                    <p className="text-sm text-primary-600 dark:text-primary-400">{item.points} points</p>
                   </div>
                   <Link 
                     to={`/item/${item.id}`}
@@ -175,7 +188,7 @@ const Dashboard = () => {
               ))}
               {userItems.length > 5 && (
                 <div className="text-center">
-                  <Link to="/browse" className="text-primary-600 hover:text-primary-700 text-sm">
+                  <Link to="/browse" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm">
                     View all {userItems.length} items
                   </Link>
                 </div>
@@ -186,15 +199,15 @@ const Dashboard = () => {
 
         {/* Pending Swap Requests */}
         <div className="card p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center space-x-2">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
             <Clock className="w-5 h-5" />
             <span>Pending Requests</span>
           </h2>
           
           {swapRequests.length === 0 ? (
             <div className="text-center py-8">
-              <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No pending swap requests</p>
+              <Clock className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400">No pending swap requests</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -248,9 +261,9 @@ const Dashboard = () => {
             {swapHistory.slice(0, 10).map((swap) => (
               <div key={swap.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                 <div className="flex items-center space-x-4">
-                  {swap.itemImages && (
+                  {swap.itemImages && swap.itemImages.length > 0 && (
                     <img 
-                      src={`/uploads/${swap.itemImages.split(',')[0]}`}
+                      src={`/uploads/${swap.itemImages[0]}`}
                       alt={swap.itemTitle}
                       className="w-12 h-12 object-cover rounded-lg"
                     />

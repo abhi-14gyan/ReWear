@@ -10,8 +10,7 @@ const router = Router();
 router.get('/:id/items', async (req, res) => {
   try {
     const items = await Item.find({ 
-      userId: req.params.id, 
-      status: 'approved' 
+      userId: req.params.id
     })
     .populate('userId', 'name')
     .sort({ createdAt: -1 });
