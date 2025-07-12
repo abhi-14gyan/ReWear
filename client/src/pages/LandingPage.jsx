@@ -37,11 +37,22 @@ const LandingPage = () => {
     fetchFeaturedItems();
   }, []);
 
-  // Carousel logic (simple manual carousel for now)
+  // Carousel logic with auto-switching
   const [carouselIdx, setCarouselIdx] = useState(0);
   const carouselItems = featuredItems.slice(0, 5); // Show up to 5 in carousel
   const nextCarousel = () => setCarouselIdx((prev) => (prev + 1) % carouselItems.length);
   const prevCarousel = () => setCarouselIdx((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+
+  // Auto-switch carousel images every 2.5 seconds
+  useEffect(() => {
+    if (carouselItems.length <= 1) return; // Don't auto-switch if only one item
+
+    const interval = setInterval(() => {
+      setCarouselIdx((prev) => (prev + 1) % carouselItems.length);
+    }, 2500); // Switch every 2.5 seconds
+
+    return () => clearInterval(interval);
+  }, [carouselItems.length]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
@@ -102,14 +113,23 @@ const LandingPage = () => {
             <div className="h-64 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse text-gray-500 dark:text-gray-400">Images</div>
           ) : (
             <div className="relative h-64 rounded-lg overflow-hidden">
-              <img
-                src={getImageUrlFull(carouselItems[carouselIdx].images[0])}
-                alt={carouselItems[carouselIdx].title}
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4">
-                <h3 className="text-xl font-bold text-white">{carouselItems[carouselIdx].title}</h3>
-                <p className="text-sm text-gray-200">{carouselItems[carouselIdx].category} • {carouselItems[carouselIdx].condition}</p>
+              <div 
+                className="flex transition-transform duration-500 ease-in-out h-full"
+                style={{ transform: `translateX(-${carouselIdx * 100}%)` }}
+              >
+                {carouselItems.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0">
+                    <img
+                      src={getImageUrlFull(item.images[0])}
+                      alt={item.title}
+                      className="w-full h-full object-cover object-center"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4">
+                      <h3 className="text-xl font-bold text-white">{item.title}</h3>
+                      <p className="text-sm text-gray-200">{item.category} • {item.condition}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
               {carouselItems.length > 1 && (
                 <>
