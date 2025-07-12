@@ -79,7 +79,21 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-
+      {/* About ReWear Section */}
+      <section className="py-16 bg-white dark:bg-gray-800">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+        <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+        Welcome to ReWear
+        </h1>
+          <div className="prose prose-lg mx-auto text-gray-600 dark:text-gray-300 leading-relaxed">
+            <p className="mb-6">
+              ReWear is more than just a clothing exchange platform—it's a movement towards sustainable fashion and conscious consumption. 
+              We believe that every piece of clothing deserves a second chance, and every fashion enthusiast deserves access to unique, 
+              quality garments without contributing to the environmental impact of fast fashion.
+            </p>
+          </div>
+        </div>
+      </section>
       {/* Carousel/Banner */}
       <section className="w-full bg-white dark:bg-gray-800 py-8 flex flex-col items-center">
         <div className="w-full max-w-4xl relative px-4">
@@ -172,6 +186,24 @@ const LandingPage = () => {
               <span>View All Items</span>
               <ArrowRight size={20} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-white dark:bg-gray-900">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">About ReWear</h2>
+          <div className="prose prose-lg mx-auto text-gray-600 dark:text-gray-300 leading-relaxed">
+            <p className="mb-6">
+              Our innovative point-based system makes clothing exchange fair and accessible. List your gently used items to earn points, 
+              then redeem them for pieces you love from our community. Whether you're looking for casual everyday wear, elegant formal attire, 
+              vintage treasures, or designer pieces, our diverse collection has something for every style and occasion.
+            </p>
+            <p>
+              Join thousands of fashion-forward individuals who are making a difference—one swap at a time. Together, we're reducing textile waste, 
+              building meaningful connections, and creating a more sustainable future for fashion. Start your ReWear journey today and discover 
+              the joy of giving clothes a new life while refreshing your wardrobe sustainably.
+            </p>
           </div>
         </div>
       </section>
