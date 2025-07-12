@@ -61,16 +61,14 @@ const ItemDetail = () => {
   };
 
   const nextImage = () => {
-    if (item.images) {
-      const images = item.images.split(',');
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    if (item.images && item.images.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % item.images.length);
     }
   };
 
   const prevImage = () => {
-    if (item.images) {
-      const images = item.images.split(',');
-      setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    if (item.images && item.images.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + item.images.length) % item.images.length);
     }
   };
 
@@ -99,7 +97,7 @@ const ItemDetail = () => {
     );
   }
 
-  const images = item.images ? item.images.split(',') : [];
+  const images = item.images || [];
   const isOwnItem = user && item.uploaderId === user.id;
 
   return (
