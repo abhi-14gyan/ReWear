@@ -1,22 +1,12 @@
 import { Router } from 'express';
-import multer, { diskStorage } from 'multer';
-import { extname } from 'path';
+import multer from 'multer';
 import { body, validationResult } from 'express-validator';
 import Item from '../models/Item.js';
 import User from '../models/User.js';
 import { auth } from '../middlewares/auth.js';
+import { storage } from '../config/cloudinary.js';
 
 const router = Router();
-
-const storage = diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'item-' + uniqueSuffix + extname(file.originalname));
-  }
-});
 
 const upload = multer({ 
   storage: storage,
@@ -126,7 +116,7 @@ router.post('/', auth, upload.array('images', 5), [
     }
 
     const { title, description, category, type, size, condition, tags, points } = req.body;
-    const images = req.files ? req.files.map(file => file.filename) : [];
+    const images = req.files ? req.files.map(file => file.path) : [];
 
     const item = new Item({
       title,
@@ -176,7 +166,7 @@ router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
     };
 
     if (req.files && req.files.length > 0) {
-      updateData.images = req.files.map(file => file.filename);
+      updateData.images = req.files.map(file => file.path);
     }
 
     await Item.findByIdAndUpdate(itemId, updateData);

@@ -2,22 +2,30 @@
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return '';
   
-  // If we're in development and the server is running on localhost
+  // If the image path is already a full URL (Cloudinary), return it as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  
+  // Fallback for local images (if any)
   if (process.env.NODE_ENV === 'development') {
-    // Use the proxy URL for development
     return `/uploads/${imagePath}`;
   }
   
-  // For production, use the full server URL
   const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
   return `${serverUrl}/uploads/${imagePath}`;
 };
 
-// Alternative: Always use the full server URL
+// Alternative: Always use the full server URL or return Cloudinary URL as is
 export const getImageUrlFull = (imagePath) => {
   if (!imagePath) return '';
   
-  // Get the current hostname and port
+  // If the image path is already a full URL (Cloudinary), return it as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  
+  // Fallback for local images (if any)
   const protocol = window.location.protocol;
   const hostname = window.location.hostname;
   const port = process.env.NODE_ENV === 'development' ? ':5000' : '';
