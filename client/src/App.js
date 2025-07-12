@@ -15,7 +15,7 @@ function App() {
           </main>
         </div>
       </Router>
-    // </AuthProvider>
+    </AuthProvider>
   );
 }
 
