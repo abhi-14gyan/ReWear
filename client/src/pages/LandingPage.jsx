@@ -64,7 +64,7 @@ const LandingPage = () => {
           ) : (
             <>
               <Link to="/register" className="btn-primary">Get Started</Link>
-              <Link to="/browse" className="btn-outline">Browse Items</Link>
+              <Link to="/browse" className="btn-outline text-gray-400">Browse Items</Link>
             </>
           )}
         </div>
