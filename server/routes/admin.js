@@ -1,10 +1,10 @@
-const express = require('express');
-const Item = require('../models/Item');
-const User = require('../models/User');
-const Swap = require('../models/Swap');
-const { adminAuth } = require('../middleware/auth');
+import { Router } from 'express';
+import Item from '../models/Item.js';
+import User from '../models/User.js';
+import Swap from '../models/Swap.js';
+import { adminAuth } from '../middlewares/auth.js';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/pending-items', adminAuth, async (req, res) => {
   try {
@@ -208,4 +208,4 @@ router.get('/activity', adminAuth, async (req, res) => {
   }
 });
 
-module.exports = router; 
+export default router; 
