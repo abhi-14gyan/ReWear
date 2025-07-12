@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List } from 'lucide-react';
 import axios from 'axios';
 
 const BrowseItems = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,8 +12,21 @@ const BrowseItems = () => {
   const [type, setType] = useState('');
   const [viewMode, setViewMode] = useState('grid');
 
-  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Accessories'];
-  const types = ['Casual', 'Formal', 'Sportswear', 'Vintage', 'Designer'];
+  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Accessories'];
+  const types = ['Casual', 'Formal', 'Sportswear', 'Vintage', 'Designer', "School Dresses"];
+
+  useEffect(() => {
+    // Read URL parameters on component mount
+    const urlType = searchParams.get('type');
+    const urlCategory = searchParams.get('category');
+    
+    if (urlType && types.includes(urlType)) {
+      setType(urlType);
+    }
+    if (urlCategory && categories.includes(urlCategory)) {
+      setCategory(urlCategory);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchItems();
