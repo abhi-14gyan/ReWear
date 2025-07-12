@@ -144,7 +144,7 @@ const AdminPanel = () => {
                       <div className="flex items-start space-x-4">
                         {item.images && (
                           <img
-                            src={`/uploads/${item.images.split(',')[0]}`}
+                            src={`/uploads/${item.images[0]}`}
                             alt={item.title}
                             className="w-24 h-24 object-cover rounded-lg"
                           />

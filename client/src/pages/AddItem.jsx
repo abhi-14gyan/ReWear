@@ -19,9 +19,9 @@ const AddItem = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Accessories'];
-  const types = ['Casual', 'Formal', 'Sportswear', 'Vintage', 'Designer'];
-  const conditions = ['New', 'Like New', 'Good', 'Fair', 'Used'];
+  const categories = ['tops', 'bottoms', 'dresses', 'outerwear', 'shoes', 'accessories'];
+  const types = ['men', 'women', 'unisex'];
+  const conditions = ['new', 'like-new', 'good', 'fair', 'poor'];
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'];
 
   const handleChange = (e) => {
@@ -50,6 +50,13 @@ const AddItem = () => {
     setLoading(true);
     setError('');
 
+    // Basic validation
+    if (!formData.title || !formData.description || !formData.category || !formData.type || !formData.condition) {
+      setError('Please fill in all required fields');
+      setLoading(false);
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       
@@ -65,15 +72,29 @@ const AddItem = () => {
         formDataToSend.append('images', image);
       });
 
-      await axios.post('/api/items', formDataToSend, {
+      console.log('Sending form data:', {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        type: formData.type,
+        condition: formData.condition,
+        imagesCount: images.length
+      });
+
+      const response = await axios.post('/api/items', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
 
+      console.log('Item created successfully:', response.data);
       navigate('/dashboard');
     } catch (error) {
-      setError(error.response?.data?.message || 'Error creating item');
+      console.error('Error creating item:', error);
+      console.error('Error response:', error.response);
+      console.error('Error status:', error.response?.status);
+      console.error('Error data:', error.response?.data);
+      setError(error.response?.data?.message || 'Error creating item. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -82,25 +103,25 @@ const AddItem = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">List an Item</h1>
-        <p className="text-gray-600">Share your clothing with the community</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">List an Item</h1>
+        <p className="text-gray-600 dark:text-gray-400">Share your clothing with the community</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg">
             {error}
           </div>
         )}
 
         {/* Image Upload */}
         <div className="card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Images</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Images</h2>
           <div className="space-y-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <Upload className="mx-auto h-12 w-12 text-gray-400" />
+            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+              <Upload className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
               <div className="mt-4">
-                <label htmlFor="images" className="btn-primary cursor-pointer">
+                <label htmlFor="images" className="inline-flex items-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer">
                   <Plus className="w-4 h-4 mr-2" />
                   Upload Images
                 </label>
@@ -113,7 +134,7 @@ const AddItem = () => {
                   className="hidden"
                 />
               </div>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Upload up to 5 images (JPG, PNG, GIF)
               </p>
             </div>
@@ -143,10 +164,10 @@ const AddItem = () => {
 
         {/* Basic Information */}
         <div className="card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Basic Information</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Title *
               </label>
               <input
@@ -162,7 +183,7 @@ const AddItem = () => {
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Category *
               </label>
               <select
@@ -175,13 +196,13 @@ const AddItem = () => {
               >
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Type *
               </label>
               <select
@@ -194,13 +215,13 @@ const AddItem = () => {
               >
                 <option value="">Select Type</option>
                 {types.map((type) => (
-                  <option key={type} value={type}>{type}</option>
+                  <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="size" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Size
               </label>
               <select
@@ -218,7 +239,7 @@ const AddItem = () => {
             </div>
 
             <div>
-              <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="condition" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Condition *
               </label>
               <select
@@ -231,13 +252,13 @@ const AddItem = () => {
               >
                 <option value="">Select Condition</option>
                 {conditions.map((cond) => (
-                  <option key={cond} value={cond}>{cond}</option>
+                  <option key={cond} value={cond}>{cond.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label htmlFor="points" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="points" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Points Value
               </label>
               <input
@@ -254,7 +275,7 @@ const AddItem = () => {
           </div>
 
           <div className="mt-6">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Description *
             </label>
             <textarea
@@ -270,7 +291,7 @@ const AddItem = () => {
           </div>
 
           <div className="mt-6">
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags
             </label>
             <input
@@ -297,7 +318,7 @@ const AddItem = () => {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary"
+            className="bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="flex items-center space-x-2">
