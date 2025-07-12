@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List } from 'lucide-react';
 import axios from 'axios';
+import { getImageUrlFull } from '../utils/imageUtils';
 
 const BrowseItems = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -194,7 +195,7 @@ const BrowseItems = () => {
               <div className={viewMode === 'list' ? 'w-32 h-32' : 'aspect-w-16 aspect-h-12'}>
                 {item.images ? (
                   <img 
-                    src={`/uploads/${item.images[0]}`}
+                    src={getImageUrlFull(item.images[0])}
                     alt={item.title}
                     className={`object-cover ${viewMode === 'list' ? 'w-full h-full' : 'w-full h-48'}`}
                   />

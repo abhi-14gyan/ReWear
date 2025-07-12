@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { User, Package, Clock, CheckCircle, XCircle, Plus, Edit, Sun, Moon } from 'lucide-react';
 import axios from 'axios';
+import { getImageUrlFull } from '../utils/imageUtils';
 
 const Dashboard = () => {
   const { user, updateProfile } = useAuth();
@@ -168,7 +169,7 @@ const Dashboard = () => {
                 <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                   {item.images && item.images.length > 0 && (
                     <img 
-                      src={`/uploads/${item.images[0]}`}
+                      src={getImageUrlFull(item.images[0])}
                       alt={item.title}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
@@ -263,7 +264,7 @@ const Dashboard = () => {
                 <div className="flex items-center space-x-4">
                   {swap.itemImages && swap.itemImages.length > 0 && (
                     <img 
-                      src={`/uploads/${swap.itemImages[0]}`}
+                      src={getImageUrlFull(swap.itemImages[0])}
                       alt={swap.itemTitle}
                       className="w-12 h-12 object-cover rounded-lg"
                     />

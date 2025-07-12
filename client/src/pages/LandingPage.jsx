@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { ArrowRight, Heart, Users, TrendingUp, Star, Search, Sun, Moon } from 'lucide-react';
 import axios from 'axios';
+import { getImageUrlFull } from '../utils/imageUtils';
 
 // Categories matching BrowseItems types
 const categories = [
@@ -88,7 +89,7 @@ const LandingPage = () => {
           ) : (
             <div className="relative h-64 rounded-lg overflow-hidden">
               <img
-                src={`/uploads/${carouselItems[carouselIdx].images[0]}`}
+                src={getImageUrlFull(carouselItems[carouselIdx].images[0])}
                 alt={carouselItems[carouselIdx].title}
                 className="w-full h-full object-cover object-center"
               />
@@ -141,7 +142,7 @@ const LandingPage = () => {
                   <div className="aspect-w-16 aspect-h-12 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     {item.images && item.images.length > 0 ? (
                       <img
-                        src={`/uploads/${item.images[0]}`}
+                        src={getImageUrlFull(item.images[0])}
                         alt={item.title}
                         className="w-full h-48 object-cover"
                       />

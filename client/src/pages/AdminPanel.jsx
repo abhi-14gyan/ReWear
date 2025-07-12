@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Package, CheckCircle, XCircle, Trash2, TrendingUp, Activity } from 'lucide-react';
 import axios from 'axios';
+import { getImageUrlFull } from '../utils/imageUtils';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('pending');
@@ -145,7 +146,7 @@ const AdminPanel = () => {
                       <div className="flex items-start space-x-4">
                         {item.images && (
                           <img
-                            src={`/uploads/${item.images[0]}`}
+                            src={getImageUrlFull(item.images[0])}
                             alt={item.title}
                             className="w-24 h-24 object-cover rounded-lg"
                           />

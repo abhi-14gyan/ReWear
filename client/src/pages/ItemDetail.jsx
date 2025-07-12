@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ChevronLeft, ChevronRight, User, Calendar, Tag, Heart, Coins } from 'lucide-react';
 import axios from 'axios';
+import { getImageUrlFull } from '../utils/imageUtils';
 
 const ItemDetail = () => {
   const { id } = useParams();
@@ -108,7 +109,7 @@ const ItemDetail = () => {
           <div className="relative">
             {images.length > 0 ? (
               <img
-                src={`/uploads/${images[currentImageIndex]}`}
+                src={getImageUrlFull(images[currentImageIndex])}
                 alt={item.title}
                 className="w-full h-96 object-cover rounded-lg"
               />
@@ -147,7 +148,7 @@ const ItemDetail = () => {
                   }`}
                 >
                   <img
-                    src={`/uploads/${image}`}
+                    src={getImageUrlFull(image)}
                     alt={`${item.title} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
