@@ -19,7 +19,7 @@ const AddItem = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Accessories'];
+  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Accessories'];
   const types = ['Casual', 'Formal', 'Sportswear', 'Vintage', 'Designer', "School Dresses"];
   const conditions = ['new', 'like-new', 'good', 'fair', 'poor'];
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'];

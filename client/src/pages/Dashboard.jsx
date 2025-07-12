@@ -212,16 +212,16 @@ const Dashboard = () => {
           ) : (
             <div className="space-y-4">
               {swapRequests.map((swap) => (
-                <div key={swap.id} className="p-4 border border-gray-200 rounded-lg">
+                <div key={swap.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium text-gray-900">{swap.itemTitle}</h3>
-                    <span className="text-sm text-gray-500">{swap.type}</span>
+                    <h3 className="font-medium text-gray-900 dark:text-white">{swap.itemTitle}</h3>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{swap.type}</span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                     Requested by: {swap.requesterName}
                   </p>
                   {swap.pointsOffered > 0 && (
-                    <p className="text-sm text-primary-600 mb-3">
+                    <p className="text-sm text-primary-600 dark:text-primary-400 mb-3">
                       Points offered: {swap.pointsOffered}
                     </p>
                   )}
@@ -250,16 +250,16 @@ const Dashboard = () => {
 
       {/* Swap History */}
       <div className="card p-6 mt-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Activity</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Recent Activity</h2>
         
         {swapHistory.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">No swap history yet</p>
+            <p className="text-gray-500 dark:text-gray-400">No swap history yet</p>
           </div>
         ) : (
           <div className="space-y-4">
             {swapHistory.slice(0, 10).map((swap) => (
-              <div key={swap.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div key={swap.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                 <div className="flex items-center space-x-4">
                   {swap.itemImages && swap.itemImages.length > 0 && (
                     <img 
@@ -269,11 +269,11 @@ const Dashboard = () => {
                     />
                   )}
                   <div>
-                    <h3 className="font-medium text-gray-900">{swap.itemTitle}</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="font-medium text-gray-900 dark:text-white">{swap.itemTitle}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {swap.requesterName} ↔ {swap.ownerName}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {new Date(swap.completedAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -281,8 +281,8 @@ const Dashboard = () => {
                 <div className="text-right">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                     swap.status === 'accepted' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
+                      ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' 
+                      : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
                   }`}>
                     {swap.status}
                   </span>

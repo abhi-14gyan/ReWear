@@ -26,13 +26,14 @@ const adminAuth = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
     
-    if (!decoded.isAdmin) {
+    if (!decoded.user?.isAdmin) {
       return res.status(403).json({ message: 'Admin access required' });
     }
     
     req.user = decoded;
     next();
   } catch (err) {
+    console.error('Admin auth error:', err);
     res.status(401).json({ message: 'Token is not valid' });
   }
 };

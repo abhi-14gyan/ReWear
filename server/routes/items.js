@@ -138,10 +138,12 @@ router.post('/', auth, upload.array('images', 5), [
       tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
       images,
       points: points || 0,
-      userId: req.user.user.id
+      userId: req.user.user.id,
+      status: 'approved' // Auto-approve items for immediate visibility
     });
 
     await item.save();
+
     res.json({ id: item._id, message: 'Item created successfully' });
   } catch (err) {
     console.error('Create item error:', err);

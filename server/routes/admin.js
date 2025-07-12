@@ -6,6 +6,24 @@ import { adminAuth } from '../middlewares/auth.js';
 
 const router = Router();
 
+// Test route to check admin status
+router.get('/test', adminAuth, async (req, res) => {
+  try {
+    console.log('=== ADMIN TEST ROUTE ===');
+    console.log('Current user:', req.user);
+    console.log('User isAdmin:', req.user.user?.isAdmin);
+    
+    res.json({
+      message: 'Admin test route working',
+      user: req.user.user,
+      isAdmin: req.user.user?.isAdmin
+    });
+  } catch (err) {
+    console.error('Admin test route error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 router.get('/pending-items', adminAuth, async (req, res) => {
   try {
     const items = await Item.find({ status: 'pending' })
@@ -93,6 +111,7 @@ router.get('/users', adminAuth, async (req, res) => {
       ...user,
       id: user._id
     }));
+    
     res.json(transformedUsers);
   } catch (err) {
     console.error('Get users error:', err);

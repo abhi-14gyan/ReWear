@@ -33,6 +33,7 @@ const AdminPanel = () => {
       }
     } catch (error) {
       console.error('Error fetching admin data:', error);
+      console.error('Error response:', error.response);
     } finally {
       setLoading(false);
     }
@@ -216,44 +217,52 @@ const AdminPanel = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {users.map((user) => (
-                      <tr key={user.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                            <div className="text-sm text-gray-500">{user.email}</div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <input
-                            type="number"
-                            value={user.points}
-                            onChange={(e) => handleUpdateUserPoints(user.id, parseInt(e.target.value))}
-                            className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
-                          />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {user.itemCount}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            user.isAdmin 
-                              ? 'bg-purple-100 text-purple-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {user.isAdmin ? 'Admin' : 'User'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => handleToggleAdmin(user.id)}
-                            className="text-primary-600 hover:text-primary-900"
-                          >
-                            {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
-                          </button>
+                    {users.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+                          No users found
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      users.map((user) => (
+                        <tr key={user.id}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                              <div className="text-sm text-gray-500">{user.email}</div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <input
+                              type="number"
+                              value={user.points}
+                              onChange={(e) => handleUpdateUserPoints(user.id, parseInt(e.target.value))}
+                              className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                            />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {user.itemCount}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                              user.isAdmin 
+                                ? 'bg-purple-100 text-purple-800' 
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {user.isAdmin ? 'Admin' : 'User'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button
+                              onClick={() => handleToggleAdmin(user.id)}
+                              className="text-primary-600 hover:text-primary-900"
+                            >
+                              {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

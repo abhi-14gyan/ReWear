@@ -12,7 +12,7 @@ const BrowseItems = () => {
   const [type, setType] = useState('');
   const [viewMode, setViewMode] = useState('grid');
 
-  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Accessories'];
+  const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Accessories'];
   const types = ['Casual', 'Formal', 'Sportswear', 'Vintage', 'Designer', "School Dresses"];
 
   useEffect(() => {
