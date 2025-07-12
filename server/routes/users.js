@@ -1,10 +1,10 @@
-const express = require('express');
-const Item = require('../models/Item');
-const User = require('../models/User');
-const Swap = require('../models/Swap');
-const { auth } = require('../middleware/auth');
+import { Router } from 'express';
+import Item from '../models/Item.js';
+import User from '../models/User.js';
+import Swap from '../models/Swap.js';
+import { auth } from '../middlewares/auth.js';
 
-const router = express.Router();
+const router = Router();
 
 // Get user's items
 router.get('/:id/items', async (req, res) => {
@@ -202,4 +202,4 @@ router.get('/:id/active-swaps', async (req, res) => {
   }
 });
 
-module.exports = router; 
+export default router; 

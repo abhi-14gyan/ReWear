@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import { find, findByIdAndUpdate, findByIdAndDelete, countDocuments } from '../models/Item';
-import { aggregate, findByIdAndUpdate as _findByIdAndUpdate, findById, countDocuments as _countDocuments } from '../models/User';
-import { countDocuments as __countDocuments, find as _find } from '../models/Swap';
-import { adminAuth } from '../middleware/auth';
+import Item from '../models/Item.js';
+import User from '../models/User.js';
+import Swap from '../models/Swap.js';
+import { adminAuth } from '../middlewares/auth.js';
 
 const router = Router();
 
 router.get('/pending-items', adminAuth, async (req, res) => {
   try {
-    const items = await find({ status: 'pending' })
+    const items = await Item.find({ status: 'pending' })
       .populate('userId', 'name email')
       .sort({ createdAt: -1 });
 
@@ -28,7 +28,7 @@ router.get('/pending-items', adminAuth, async (req, res) => {
 router.put('/items/:id/approve', adminAuth, async (req, res) => {
   try {
     const itemId = req.params.id;
-    await findByIdAndUpdate(itemId, { status: 'approved' });
+    await Item.findByIdAndUpdate(itemId, { status: 'approved' });
     res.json({ message: 'Item approved successfully' });
   } catch (err) {
     console.error('Approve item error:', err);
@@ -39,7 +39,7 @@ router.put('/items/:id/approve', adminAuth, async (req, res) => {
 router.put('/items/:id/reject', adminAuth, async (req, res) => {
   try {
     const itemId = req.params.id;
-    await findByIdAndUpdate(itemId, { status: 'rejected' });
+    await Item.findByIdAndUpdate(itemId, { status: 'rejected' });
     res.json({ message: 'Item rejected successfully' });
   } catch (err) {
     console.error('Reject item error:', err);
@@ -50,7 +50,7 @@ router.put('/items/:id/reject', adminAuth, async (req, res) => {
 router.delete('/items/:id', adminAuth, async (req, res) => {
   try {
     const itemId = req.params.id;
-    await findByIdAndDelete(itemId);
+    await Item.findByIdAndDelete(itemId);
     res.json({ message: 'Item removed successfully' });
   } catch (err) {
     console.error('Remove item error:', err);
@@ -60,7 +60,7 @@ router.delete('/items/:id', adminAuth, async (req, res) => {
 
 router.get('/users', adminAuth, async (req, res) => {
   try {
-    const users = await aggregate([
+    const users = await User.aggregate([
       {
         $lookup: {
           from: 'items',
@@ -101,7 +101,7 @@ router.put('/users/:id/points', adminAuth, async (req, res) => {
       return res.status(400).json({ message: 'Invalid points value' });
     }
 
-    await _findByIdAndUpdate(userId, { points });
+    await User.findByIdAndUpdate(userId, { points });
     res.json({ message: 'User points updated successfully' });
   } catch (err) {
     console.error('Update user points error:', err);
@@ -112,14 +112,14 @@ router.put('/users/:id/points', adminAuth, async (req, res) => {
 router.put('/users/:id/admin', adminAuth, async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await findById(userId);
+    const user = await User.findById(userId);
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     const newAdminStatus = !user.isAdmin;
-    await _findByIdAndUpdate(userId, { isAdmin: newAdminStatus });
+    await User.findByIdAndUpdate(userId, { isAdmin: newAdminStatus });
     
     res.json({ 
       message: `User admin status ${newAdminStatus ? 'enabled' : 'disabled'} successfully` 
@@ -133,11 +133,11 @@ router.put('/users/:id/admin', adminAuth, async (req, res) => {
 router.get('/stats', adminAuth, async (req, res) => {
   try {
     const [totalUsers, approvedItems, pendingItems, completedSwaps, totalPoints] = await Promise.all([
-      _countDocuments(),
-      countDocuments({ status: 'approved' }),
-      countDocuments({ status: 'pending' }),
-      __countDocuments({ status: 'accepted' }),
-      aggregate([
+      User.countDocuments(),
+      Item.countDocuments({ status: 'approved' }),
+      Item.countDocuments({ status: 'pending' }),
+      Swap.countDocuments({ status: 'accepted' }),
+      User.aggregate([
         {
           $group: {
             _id: null,
@@ -168,13 +168,13 @@ router.get('/activity', adminAuth, async (req, res) => {
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const [recentItems, recentSwaps] = await Promise.all([
-      find({ createdAt: { $gte: sevenDaysAgo } })
+      Item.find({ createdAt: { $gte: sevenDaysAgo } })
         .populate('userId', 'name')
         .select('title userId createdAt')
         .sort({ createdAt: -1 })
         .limit(10),
       
-      _find({ 
+      Swap.find({ 
         status: 'accepted', 
         completedAt: { $gte: sevenDaysAgo } 
       })

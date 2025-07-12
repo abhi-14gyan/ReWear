@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
-import Swap, { find, findById } from '../models/Swap';
-import { findOne, find as _find, findByIdAndUpdate } from '../models/Item';
-import { findById as _findById, findByIdAndUpdate as _findByIdAndUpdate } from '../models/User';
-import { auth } from '../middleware/auth';
+import Swap from '../models/Swap.js';
+import Item from '../models/Item.js';
+import User from '../models/User.js';
+import { auth } from '../middlewares/auth.js';
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.post('/', auth, [
     const { itemId, type, pointsOffered } = req.body;
     const requesterId = req.user.user.id;
 
-    const item = await findOne({ 
+    const item = await Item.findOne({ 
       _id: itemId, 
       isAvailable: true, 
       status: 'approved' 
@@ -37,7 +37,7 @@ router.post('/', auth, [
     }
 
     if (type === 'points') {
-      const user = await _findById(requesterId);
+      const user = await User.findById(requesterId);
       if (user.points < pointsOffered) {
         return res.status(400).json({ message: 'Insufficient points' });
       }
@@ -61,7 +61,7 @@ router.post('/', auth, [
 // Get user's swap requests (as requester)
 router.get('/my-requests', auth, async (req, res) => {
   try {
-    const swaps = await find({ requesterId: req.user.user.id })
+    const swaps = await Swap.find({ requesterId: req.user.user.id })
       .populate({
         path: 'itemId',
         select: 'title images',
@@ -89,8 +89,8 @@ router.get('/my-requests', auth, async (req, res) => {
 // Get swap requests for user's items (as item owner)
 router.get('/my-items', auth, async (req, res) => {
   try {
-    const swaps = await find({ 
-      'itemId': { $in: await _find({ userId: req.user.user.id }).select('_id') },
+    const swaps = await Swap.find({ 
+      'itemId': { $in: await Item.find({ userId: req.user.user.id }).select('_id') },
       status: 'pending'
     })
     .populate({
@@ -122,7 +122,7 @@ router.put('/:id/accept', auth, async (req, res) => {
   try {
     const swapId = req.params.id;
 
-    const swap = await findById(swapId).populate('itemId');
+    const swap = await Swap.findById(swapId).populate('itemId');
     if (!swap) {
       return res.status(404).json({ message: 'Swap request not found' });
     }
@@ -139,13 +139,13 @@ router.put('/:id/accept', auth, async (req, res) => {
     swap.completedAt = new Date();
     await swap.save();
 
-    await findByIdAndUpdate(swap.itemId._id, { isAvailable: false });
+    await Item.findByIdAndUpdate(swap.itemId._id, { isAvailable: false });
 
     if (swap.type === 'points') {
-      await _findByIdAndUpdate(swap.requesterId, { 
+      await User.findByIdAndUpdate(swap.requesterId, { 
         $inc: { points: -swap.pointsOffered } 
       });
-      await _findByIdAndUpdate(req.user.user.id, { 
+      await User.findByIdAndUpdate(req.user.user.id, { 
         $inc: { points: swap.pointsOffered } 
       });
     }
@@ -162,7 +162,7 @@ router.put('/:id/reject', auth, async (req, res) => {
   try {
     const swapId = req.params.id;
 
-    const swap = await findById(swapId).populate('itemId');
+    const swap = await Swap.findById(swapId).populate('itemId');
     if (!swap) {
       return res.status(404).json({ message: 'Swap request not found' });
     }
@@ -189,10 +189,10 @@ router.put('/:id/reject', auth, async (req, res) => {
 // Get swap history
 router.get('/history', auth, async (req, res) => {
   try {
-    const userItems = await _find({ userId: req.user.user.id }).select('_id');
+    const userItems = await Item.find({ userId: req.user.user.id }).select('_id');
     const userItemIds = userItems.map(item => item._id);
 
-    const swaps = await find({
+    const swaps = await Swap.find({
       $or: [
         { requesterId: req.user.user.id },
         { itemId: { $in: userItemIds } }

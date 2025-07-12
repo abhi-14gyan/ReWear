@@ -2,9 +2,9 @@ import { Router } from 'express';
 import multer, { diskStorage } from 'multer';
 import { extname } from 'path';
 import { body, validationResult } from 'express-validator';
-import Item, { find, findById, findByIdAndUpdate, findByIdAndDelete } from '../models/Item';
-import User from '../models/User';
-import { auth } from '../middleware/auth';
+import Item from '../models/Item.js';
+import User from '../models/User.js';
+import { auth } from '../middlewares/auth.js';
 
 const router = Router();
 
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
       ];
     }
 
-    const items = await find(query)
+    const items = await Item.find(query)
       .populate('userId', 'name')
       .sort({ createdAt: -1 });
 
@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
 
 router.get('/featured', async (req, res) => {
   try {
-    const items = await find({ status: 'approved', isAvailable: true })
+    const items = await Item.find({ status: 'approved', isAvailable: true })
       .populate('userId', 'name')
       .sort({ createdAt: -1 })
       .limit(6);
@@ -84,7 +84,7 @@ router.get('/featured', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const item = await findById(req.params.id).populate('userId', 'name id');
+    const item = await Item.findById(req.params.id).populate('userId', 'name id');
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
@@ -144,7 +144,7 @@ router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
     const { title, description, category, type, size, condition, tags, points } = req.body;
     const itemId = req.params.id;
 
-    const item = await findById(itemId);
+    const item = await Item.findById(itemId);
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
@@ -167,7 +167,7 @@ router.put('/:id', auth, upload.array('images', 5), async (req, res) => {
       updateData.images = req.files.map(file => file.filename);
     }
 
-    await findByIdAndUpdate(itemId, updateData);
+    await Item.findByIdAndUpdate(itemId, updateData);
     res.json({ message: 'Item updated successfully' });
   } catch (err) {
     console.error('Update item error:', err);
@@ -179,7 +179,7 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const itemId = req.params.id;
 
-    const item = await findById(itemId);
+    const item = await Item.findById(itemId);
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
@@ -187,7 +187,7 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    await findByIdAndDelete(itemId);
+    await Item.findByIdAndDelete(itemId);
     res.json({ message: 'Item deleted successfully' });
   } catch (err) {
     console.error('Delete item error:', err);
@@ -197,7 +197,7 @@ router.delete('/:id', auth, async (req, res) => {
 
 router.get('/user/:userId', async (req, res) => {
   try {
-    const items = await find({ 
+    const items = await Item.find({ 
       userId: req.params.userId, 
       status: 'approved' 
     })

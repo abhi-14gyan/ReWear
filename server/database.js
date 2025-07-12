@@ -1,10 +1,15 @@
 import { connect } from 'mongoose';
-import User, { findOne } from './models/User';
+import User from './models/User.js';
 
 // MongoDB connection
 const connectDB = async () => {
   try {
-    const conn = await connect(process.env.MONGODB_URI , {
+    if (!process.env.MONGO_URI) {
+      console.log('MONGO_URI not found, skipping database connection');
+      return;
+    }
+    
+    const conn = await connect(process.env.MONGO_URI , {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -22,7 +27,7 @@ const connectDB = async () => {
 
 const createDefaultAdmin = async () => {
   try {
-    const adminExists = await findOne({ email: 'admin@rewear.com' });
+    const adminExists = await User.findOne({ email: 'admin@rewear.com' });
     
     if (!adminExists) {
       const adminUser = new User({
@@ -41,4 +46,4 @@ const createDefaultAdmin = async () => {
   }
 };
 
-export default { connectDB }; 
+export { connectDB }; 
