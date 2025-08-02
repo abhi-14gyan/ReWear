@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ChevronLeft, ChevronRight, User, Calendar, Tag, Heart, Coins } from 'lucide-react';
-import axios from 'axios';
+import api from '../config/axios';
 import { getImageUrlFull } from '../utils/imageUtils';
 
 const ItemDetail = () => {
@@ -23,7 +23,7 @@ const ItemDetail = () => {
 
   const fetchItem = async () => {
     try {
-      const response = await axios.get(`/api/items/${id}`);
+      const response = await api.get(`/api/items/${id}`);
       setItem(response.data);
     } catch (error) {
       setError('Item not found');
@@ -47,7 +47,7 @@ const ItemDetail = () => {
     setError('');
 
     try {
-      await axios.post('/api/swaps', {
+      await api.post('/api/swaps', {
         itemId: item.id,
         type: swapType,
         pointsOffered: swapType === 'points' ? parseInt(pointsOffered) : 0

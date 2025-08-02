@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List } from 'lucide-react';
-import axios from 'axios';
+import api from '../config/axios';
 import { getImageUrlFull } from '../utils/imageUtils';
 
 const BrowseItems = () => {
@@ -41,7 +41,7 @@ const BrowseItems = () => {
       if (category) params.append('category', category);
       if (type) params.append('type', type);
 
-      const response = await axios.get(`/api/items?${params.toString()}`);
+      const response = await api.get(`/api/items?${params.toString()}`);
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);

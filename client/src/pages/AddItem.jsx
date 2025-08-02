@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Upload, X, Plus } from 'lucide-react';
-import axios from 'axios';
+import api from '../config/axios';
 
 const AddItem = () => {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ const AddItem = () => {
         imagesCount: images.length
       });
 
-      const response = await axios.post('/api/items', formDataToSend, {
+      const response = await api.post('/api/items', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { ArrowRight, Heart, Users, TrendingUp, Star, Search, Sun, Moon } from 'lucide-react';
-import axios from 'axios';
+import api from '../config/axios';
 import { getImageUrlFull } from '../utils/imageUtils';
 
 // Categories matching BrowseItems types
@@ -26,7 +26,7 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchFeaturedItems = async () => {
       try {
-        const response = await axios.get('/api/items/featured');
+        const response = await api.get('/api/items/featured');
         setFeaturedItems(response.data);
       } catch (error) {
         console.error('Error fetching featured items:', error);

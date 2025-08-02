@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Package, CheckCircle, XCircle, Trash2, TrendingUp, Activity } from 'lucide-react';
-import axios from 'axios';
+import api from '../config/axios';
 import { getImageUrlFull } from '../utils/imageUtils';
 
 const AdminPanel = () => {
@@ -19,15 +19,15 @@ const AdminPanel = () => {
     try {
       setLoading(true);
       if (activeTab === 'pending') {
-        const response = await axios.get('/api/admin/pending-items');
+        const response = await api.get('/api/admin/pending-items');
         setPendingItems(response.data);
       } else if (activeTab === 'users') {
-        const response = await axios.get('/api/admin/users');
+        const response = await api.get('/api/admin/users');
         setUsers(response.data);
       } else if (activeTab === 'stats') {
         const [statsRes, activityRes] = await Promise.all([
-          axios.get('/api/admin/stats'),
-          axios.get('/api/admin/activity')
+          api.get('/api/admin/stats'),
+          api.get('/api/admin/activity')
         ]);
         setStats(statsRes.data);
         setActivity(activityRes.data);
@@ -44,7 +44,7 @@ const AdminPanel = () => {
 
   const handleApproveItem = async (itemId) => {
     try {
-      await axios.put(`/api/admin/items/${itemId}/approve`);
+      await api.put(`/api/admin/items/${itemId}/approve`);
       fetchData();
     } catch (error) {
       console.error('Error approving item:', error);
@@ -53,7 +53,7 @@ const AdminPanel = () => {
 
   const handleRejectItem = async (itemId) => {
     try {
-      await axios.put(`/api/admin/items/${itemId}/reject`);
+      await api.put(`/api/admin/items/${itemId}/reject`);
       fetchData();
     } catch (error) {
       console.error('Error rejecting item:', error);
@@ -63,7 +63,7 @@ const AdminPanel = () => {
   const handleRemoveItem = async (itemId) => {
     if (window.confirm('Are you sure you want to remove this item?')) {
       try {
-        await axios.delete(`/api/admin/items/${itemId}`);
+        await api.delete(`/api/admin/items/${itemId}`);
         fetchData();
       } catch (error) {
         console.error('Error removing item:', error);
@@ -73,7 +73,7 @@ const AdminPanel = () => {
 
   const handleUpdateUserPoints = async (userId, points) => {
     try {
-      await axios.put(`/api/admin/users/${userId}/points`, { points });
+      await api.put(`/api/admin/users/${userId}/points`, { points });
       fetchData();
     } catch (error) {
       console.error('Error updating user points:', error);
@@ -82,7 +82,7 @@ const AdminPanel = () => {
 
   const handleToggleAdmin = async (userId) => {
     try {
-      await axios.put(`/api/admin/users/${userId}/admin`);
+      await api.put(`/api/admin/users/${userId}/admin`);
       fetchData();
     } catch (error) {
       console.error('Error toggling admin status:', error);

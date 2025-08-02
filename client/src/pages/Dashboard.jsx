@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { User, Package, Clock, CheckCircle, XCircle, Plus, Edit, Sun, Moon } from 'lucide-react';
-import axios from 'axios';
+import api from '../config/axios';
 import { getImageUrlFull } from '../utils/imageUtils';
 
 const Dashboard = () => {
@@ -22,11 +22,11 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const [itemsRes, requestsRes, historyRes] = await Promise.all([
-        axios.get(`/api/users/${user.id}/items`),
-        axios.get('/api/swaps/my-items'),
-        axios.get('/api/swaps/history')
-      ]);
+              const [itemsRes, requestsRes, historyRes] = await Promise.all([
+          api.get(`/api/users/${user.id}/items`),
+          api.get('/api/swaps/my-items'),
+          api.get('/api/swaps/history')
+        ]);
 
       setUserItems(itemsRes.data);
       setSwapRequests(requestsRes.data);
@@ -51,7 +51,7 @@ const Dashboard = () => {
 
   const handleAcceptSwap = async (swapId) => {
     try {
-      await axios.put(`/api/swaps/${swapId}/accept`);
+      await api.put(`/api/swaps/${swapId}/accept`);
       fetchDashboardData();
     } catch (error) {
       console.error('Error accepting swap:', error);
@@ -60,7 +60,7 @@ const Dashboard = () => {
 
   const handleRejectSwap = async (swapId) => {
     try {
-      await axios.put(`/api/swaps/${swapId}/reject`);
+      await api.put(`/api/swaps/${swapId}/reject`);
       fetchDashboardData();
     } catch (error) {
       console.error('Error rejecting swap:', error);
