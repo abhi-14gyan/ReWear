@@ -80,12 +80,6 @@ const Dashboard = () => {
       {/* Header with Theme Toggle */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-        >
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
       </div>
 
       {/* Profile Section */}

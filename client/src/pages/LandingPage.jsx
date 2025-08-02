@@ -59,16 +59,6 @@ const LandingPage = () => {
       {/* Header/Search Bar */}
       <div className="w-full bg-white dark:bg-gray-800 py-4 px-4 flex flex-col md:flex-row items-center gap-4 justify-between border-b border-gray-200 dark:border-gray-700">
         <div className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">ReWear</div>
-        <div className="flex-1 max-w-xl w-full relative">
-          <input
-            type="text"
-            className="input-field pl-10"
-            placeholder="Search for items, brands, or categories..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-        </div>
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
