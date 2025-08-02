@@ -164,7 +164,14 @@ const Dashboard = () => {
               </Link>
             </div>
           ) : (
-            <div className="space-y-4">
+            <>
+              <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <p className="text-sm text-blue-700 dark:text-blue-400">
+                  <strong>Note:</strong> New items require admin approval before they appear in the marketplace. 
+                  You can see the status of your items below.
+                </p>
+              </div>
+              <div className="space-y-4">
               {userItems.slice(0, 5).map((item) => (
                 <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                   {item.images && item.images.length > 0 && (
@@ -175,7 +182,18 @@ const Dashboard = () => {
                     />
                   )}
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900 dark:text-white">{item.title}</h3>
+                    <div className="flex items-center space-x-2 mb-1">
+                      <h3 className="font-medium text-gray-900 dark:text-white">{item.title}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        item.status === 'approved' 
+                          ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' 
+                          : item.status === 'pending'
+                          ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400'
+                          : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
+                      }`}>
+                        {item.status}
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{item.category} • {item.condition}</p>
                     <p className="text-sm text-primary-600 dark:text-primary-400">{item.points} points</p>
                   </div>
@@ -194,7 +212,8 @@ const Dashboard = () => {
                   </Link>
                 </div>
               )}
-            </div>
+              </div>
+            </>
           )}
         </div>
 
@@ -297,4 +316,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

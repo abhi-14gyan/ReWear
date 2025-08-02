@@ -145,7 +145,7 @@ router.post('/', auth, upload.array('images', 5), [
       images,
       points: points || 0,
       userId: req.user.user.id,
-      status: 'approved' // Auto-approve items for immediate visibility
+      status: 'pending' // Items require manual approval by admin
     });
 
     await item.save();
@@ -223,8 +223,8 @@ router.delete('/:id', auth, async (req, res) => {
 router.get('/user/:userId', async (req, res) => {
   try {
     const items = await Item.find({ 
-      userId: req.params.userId, 
-      status: 'approved' 
+      userId: req.params.userId
+      // Removed status filter to show all user items including pending ones
     })
     .populate('userId', 'name')
     .sort({ createdAt: -1 });
@@ -269,8 +269,8 @@ router.get('/debug/test-image', (req, res) => {
   res.json({
     message: 'Image test',
     testUrl: '/uploads/item-1752316699525-447588118.png',
-    fullUrl: `http://localhost:5000/uploads/item-1752316699525-447588118.png`
+    fullUrl: 'http://localhost:5000/uploads/item-1752316699525-447588118.png'
   });
 });
 
-export default router; 
+export default router;

@@ -174,13 +174,26 @@ const ItemDetail = () => {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">{item.points} points</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                item.isAvailable 
-                  ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' 
-                  : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
-              }`}>
-                {item.isAvailable ? 'Available' : 'Not Available'}
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  item.status === 'approved' 
+                    ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' 
+                    : item.status === 'pending'
+                    ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400'
+                    : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
+                }`}>
+                  {item.status}
+                </span>
+                {item.status === 'approved' && (
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    item.isAvailable 
+                      ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' 
+                      : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
+                  }`}>
+                    {item.isAvailable ? 'Available' : 'Not Available'}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
@@ -232,7 +245,7 @@ const ItemDetail = () => {
           </div>
 
           {/* Swap Options */}
-          {!isOwnItem && item.isAvailable && (
+          {!isOwnItem && item.isAvailable && item.status === 'approved' && (
             <div className="card p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Request This Item</h3>
               
@@ -308,10 +321,13 @@ const ItemDetail = () => {
           )}
 
           {isOwnItem && (
-            <div className="card p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+            <div className="card p-4 sm:p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
               <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">Your Item</h3>
               <p className="text-blue-700 dark:text-blue-400">
-                This is your item. You can view swap requests in your dashboard.
+                {item.status === 'pending' 
+                  ? 'This item is pending admin approval. It will be visible to other users once approved.'
+                  : 'This is your item. You can view swap requests in your dashboard.'
+                }
               </p>
             </div>
           )}
