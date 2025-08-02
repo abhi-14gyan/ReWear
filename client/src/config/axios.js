@@ -9,7 +9,7 @@ const getBaseURL = () => {
   
   // In production, use the deployed backend URL
   // Replace this with your actual deployed backend URL
-  return process.env.REACT_APP_API_URL || 'https://your-backend-domain.com';
+  return process.env.REACT_APP_API_URL || 'https://rewear-9xke.onrender.com';
 };
 
 // Create axios instance with base configuration
