@@ -31,6 +31,8 @@ const AdminPanel = () => {
         ]);
         setStats(statsRes.data);
         setActivity(activityRes.data);
+      } else if (activeTab === 'admin-codes') {
+        // Admin codes are handled in the UI
       }
     } catch (error) {
       console.error('Error fetching admin data:', error);
@@ -90,7 +92,8 @@ const AdminPanel = () => {
   const tabs = [
     { id: 'pending', label: 'Pending Items', icon: Package },
     { id: 'users', label: 'User Management', icon: Users },
-    { id: 'stats', label: 'Statistics', icon: TrendingUp }
+    { id: 'stats', label: 'Statistics', icon: TrendingUp },
+    { id: 'admin-codes', label: 'Admin Codes', icon: Activity }
   ];
 
   return (
@@ -328,6 +331,82 @@ const AdminPanel = () => {
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Admin Codes */}
+          {activeTab === 'admin-codes' && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-900">Admin Approval Codes</h2>
+              
+              <div className="card p-6">
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Current Admin Code</h3>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        value="ADMIN2024"
+                        readOnly
+                        className="input-field font-mono text-lg"
+                      />
+                    </div>
+                    <button
+                      onClick={() => navigator.clipboard.writeText('ADMIN2024')}
+                      className="btn-primary"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Share this code with users who need admin access. They can use it during registration.
+                  </p>
+                </div>
+
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Generate New Code</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        New Admin Code
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter new admin code"
+                        className="input-field"
+                        id="newAdminCode"
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        const newCode = document.getElementById('newAdminCode').value;
+                        if (newCode.trim()) {
+                          // Here you would typically make an API call to update the admin code
+                          alert(`New admin code would be set to: ${newCode}`);
+                        } else {
+                          alert('Please enter a valid admin code');
+                        }
+                      }}
+                      className="btn-secondary"
+                    >
+                      Update Admin Code
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t pt-6 mt-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Admin Registration Instructions</h3>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <ol className="list-decimal list-inside space-y-2 text-sm text-blue-900">
+                      <li>Share the current admin code with the person who needs admin access</li>
+                      <li>They should go to the registration page and check "Register as Admin"</li>
+                      <li>Enter the admin approval code in the provided field</li>
+                      <li>Complete the registration process</li>
+                      <li>The new user will have admin privileges immediately</li>
+                    </ol>
+                  </div>
+                </div>
               </div>
             </div>
           )}

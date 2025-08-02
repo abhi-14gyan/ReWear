@@ -145,12 +145,6 @@ const Login = () => {
               )}
             </button>
           </div>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Demo admin account: admin@rewear.com / admin123
-            </p>
-          </div>
         </form>
       </div>
     </div>

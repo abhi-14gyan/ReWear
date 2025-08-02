@@ -17,17 +17,31 @@ router.post('/register', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password, name } = req.body;
+    const { email, password, name, isAdmin, adminCode } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    // Validate admin registration
+    if (isAdmin) {
+      if (!adminCode) {
+        return res.status(400).json({ message: 'Admin approval code is required' });
+      }
+      
+      // Check if admin code is valid (you can customize this logic)
+      const validAdminCode = process.env.ADMIN_APPROVAL_CODE || 'ADMIN2024';
+      if (adminCode !== validAdminCode) {
+        return res.status(400).json({ message: 'Invalid admin approval code' });
+      }
+    }
+
     const user = new User({
       email,
       password,
-      name
+      name,
+      isAdmin: isAdmin || false
     });
 
     await user.save();

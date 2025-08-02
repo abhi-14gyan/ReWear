@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, Shield, Key } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    isAdmin: false,
+    adminCode: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -19,9 +21,10 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
@@ -32,6 +35,10 @@ const Register = () => {
     }
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
+      return false;
+    }
+    if (formData.isAdmin && !formData.adminCode.trim()) {
+      setError('Admin approval code is required for admin registration');
       return false;
     }
     return true;
@@ -47,7 +54,13 @@ const Register = () => {
       return;
     }
 
-    const result = await register(formData.name, formData.email, formData.password);
+    const result = await register(
+      formData.name, 
+      formData.email, 
+      formData.password, 
+      formData.isAdmin, 
+      formData.adminCode
+    );
     
     if (result.success) {
       navigate('/dashboard');
@@ -193,6 +206,49 @@ const Register = () => {
                 </button>
               </div>
             </div>
+
+            {/* Admin Registration Toggle */}
+            <div className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <input
+                id="isAdmin"
+                name="isAdmin"
+                type="checkbox"
+                checked={formData.isAdmin}
+                onChange={handleChange}
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <label htmlFor="isAdmin" className="flex items-center space-x-2 text-sm font-medium text-blue-900 dark:text-blue-300">
+                <Shield className="h-4 w-4" />
+                <span>Register as Admin</span>
+              </label>
+            </div>
+
+            {/* Admin Code Field */}
+            {formData.isAdmin && (
+              <div>
+                <label htmlFor="adminCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Admin Approval Code
+                </label>
+                <div className="mt-1 relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Key className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                  </div>
+                  <input
+                    id="adminCode"
+                    name="adminCode"
+                    type="text"
+                    required={formData.isAdmin}
+                    value={formData.adminCode}
+                    onChange={handleChange}
+                    className="input-field pl-10"
+                    placeholder="Enter admin approval code"
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Contact an existing admin to get the approval code
+                </p>
+              </div>
+            )}
           </div>
 
           <div>
@@ -204,7 +260,7 @@ const Register = () => {
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                'Create Account'
+                formData.isAdmin ? 'Create Admin Account' : 'Create Account'
               )}
             </button>
           </div>
